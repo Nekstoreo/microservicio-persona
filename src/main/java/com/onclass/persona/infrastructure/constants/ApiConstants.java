@@ -6,6 +6,8 @@ public final class ApiConstants {
 
     public static final String OPENAPI_GET_PERSON_SUMMARY = "Get Person";
     public static final String OPENAPI_GET_PERSON_DESCRIPTION = "Gets a Person by ID";
+    public static final String OPENAPI_LIST_PERSONS_SUMMARY = "List Persons";
+    public static final String OPENAPI_LIST_PERSONS_DESCRIPTION = "Lists all persons with pagination support";
     public static final String OPENAPI_CREATE_PERSON_SUMMARY = "Create Person";
     public static final String OPENAPI_CREATE_PERSON_DESCRIPTION = "Registers a new Person in the system";
     public static final String OPENAPI_PERSON_CREATED = "Person created";
