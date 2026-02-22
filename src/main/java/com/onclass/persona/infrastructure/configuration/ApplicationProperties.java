@@ -8,5 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "app")
 public class ApplicationProperties {
-    // Propiedades específicas del microservicio Persona
+    private Security security = new Security();
+
+    @Data
+    public static class Security {
+        private boolean enabled = true;
+    }
+
+    // Propiedades específicas del microservicio Person
 }

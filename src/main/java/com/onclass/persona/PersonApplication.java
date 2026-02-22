@@ -7,16 +7,16 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition(
     info = @Info(
-        title = "Microservicio Persona",
+        title = "Microservicio Person",
         version = "0.0.1",
-        description = "API para gestión de personas del sistema"
+        description = "API para gestión de persons del sistema"
     )
 )
 @SpringBootApplication
-public class PersonaApplication {
+public class PersonApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PersonaApplication.class, args);
+		SpringApplication.run(PersonApplication.class, args);
 	}
 
 }
