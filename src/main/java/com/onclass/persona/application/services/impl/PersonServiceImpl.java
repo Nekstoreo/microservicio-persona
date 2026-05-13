@@ -6,9 +6,9 @@ import com.onclass.persona.application.mappers.PersonDtoMapper;
 import com.onclass.persona.application.services.PersonService;
 import com.onclass.persona.domain.api.PersonServicePort;
 import com.onclass.persona.domain.models.PersonModel;
+import com.onclass.persona.domain.models.pagination.DomainPage;
+import com.onclass.persona.domain.models.pagination.DomainPageRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,8 +31,16 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Page<PersonResponse> findAll(Pageable pageable) {
-        Page<PersonModel> models = personServicePort.findAll(pageable);
-        return models.map(PersonDtoMapper::toResponse);
+    public DomainPage<PersonResponse> findAll(DomainPageRequest pageRequest) {
+        DomainPage<PersonModel> models = personServicePort.findAll(pageRequest);
+        return new DomainPage<>(
+                models.content().stream().map(PersonDtoMapper::toResponse).toList(),
+                models.pageNumber(),
+                models.pageSize(),
+                models.totalElements(),
+                models.totalPages(),
+                models.hasNext(),
+                models.hasPrevious()
+        );
     }
 }

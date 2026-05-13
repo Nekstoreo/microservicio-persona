@@ -3,17 +3,17 @@ package com.onclass.persona.domain.usecases;
 import com.onclass.persona.domain.api.PersonServicePort;
 import com.onclass.persona.domain.exceptions.DuplicatePersonException;
 import com.onclass.persona.domain.models.PersonModel;
+import com.onclass.persona.domain.models.pagination.DomainPage;
+import com.onclass.persona.domain.models.pagination.DomainPageRequest;
 import com.onclass.persona.domain.spi.PersonPersistencePort;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
 public class PersonUseCase implements PersonServicePort {
 
     private final PersonPersistencePort personPersistencePort;
+
+    public PersonUseCase(PersonPersistencePort personPersistencePort) {
+        this.personPersistencePort = personPersistencePort;
+    }
 
     @Override
     public PersonModel create(PersonModel person) {
@@ -32,7 +32,7 @@ public class PersonUseCase implements PersonServicePort {
     }
 
     @Override
-    public Page<PersonModel> findAll(Pageable pageable) {
-        return personPersistencePort.findAll(pageable);
+    public DomainPage<PersonModel> findAll(DomainPageRequest pageRequest) {
+        return personPersistencePort.findAll(pageRequest);
     }
 }

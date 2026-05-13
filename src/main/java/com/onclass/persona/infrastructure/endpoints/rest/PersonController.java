@@ -3,6 +3,8 @@ package com.onclass.persona.infrastructure.endpoints.rest;
 import com.onclass.persona.application.dtos.requests.PersonRequest;
 import com.onclass.persona.application.dtos.responses.PersonResponse;
 import com.onclass.persona.application.services.PersonService;
+import com.onclass.persona.domain.models.pagination.DomainPage;
+import com.onclass.persona.domain.models.pagination.DomainPageRequest;
 import com.onclass.persona.infrastructure.constants.ApiConstants;
 import com.onclass.persona.infrastructure.exceptionshandler.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,10 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,15 +33,14 @@ public class PersonController {
             @ApiResponse(responseCode = "400", description = ApiConstants.OPENAPI_INVALID_REQUEST, content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping
-    public Mono<Page<PersonResponse>> list(
+    public Mono<DomainPage<PersonResponse>> list(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
         return Mono.fromCallable(() -> {
-            Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-            Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-            return personService.findAll(pageable);
+            DomainPageRequest pageRequest = new DomainPageRequest(page, size, sortBy, sortDir);
+            return personService.findAll(pageRequest);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 

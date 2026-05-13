@@ -1,13 +1,17 @@
 package com.onclass.persona.infrastructure.adapters.persistence;
 
 import com.onclass.persona.domain.models.PersonModel;
+import com.onclass.persona.domain.models.pagination.DomainPage;
+import com.onclass.persona.domain.models.pagination.DomainPageRequest;
 import com.onclass.persona.domain.spi.PersonPersistencePort;
 import com.onclass.persona.infrastructure.entities.PersonEntity;
 import com.onclass.persona.infrastructure.mappers.PersonEntityMapper;
 import com.onclass.persona.infrastructure.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -37,8 +41,20 @@ public class PersonPersistenceAdapter implements PersonPersistencePort {
     }
 
     @Override
-    public Page<PersonModel> findAll(Pageable pageable) {
+    public DomainPage<PersonModel> findAll(DomainPageRequest pageRequest) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(pageRequest.sortDirection())
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(pageRequest.page(), pageRequest.size(), Sort.by(direction, pageRequest.sortBy()));
         Page<PersonEntity> entities = personRepository.findAll(pageable);
-        return entities.map(PersonEntityMapper::toModel);
+        return new DomainPage<>(
+                entities.getContent().stream().map(PersonEntityMapper::toModel).toList(),
+                entities.getNumber(),
+                entities.getSize(),
+                entities.getTotalElements(),
+                entities.getTotalPages(),
+                entities.hasNext(),
+                entities.hasPrevious()
+        );
     }
 }

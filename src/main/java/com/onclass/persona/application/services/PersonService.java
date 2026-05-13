@@ -2,8 +2,8 @@ package com.onclass.persona.application.services;
 
 import com.onclass.persona.application.dtos.requests.PersonRequest;
 import com.onclass.persona.application.dtos.responses.PersonResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.onclass.persona.domain.models.pagination.DomainPage;
+import com.onclass.persona.domain.models.pagination.DomainPageRequest;
 
 public interface PersonService {
 
@@ -11,5 +11,5 @@ public interface PersonService {
 
     PersonResponse findById(Long id);
 
-    Page<PersonResponse> findAll(Pageable pageable);
+    DomainPage<PersonResponse> findAll(DomainPageRequest pageRequest);
 }

@@ -1,8 +1,8 @@
 package com.onclass.persona.domain.spi;
 
 import com.onclass.persona.domain.models.PersonModel;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.onclass.persona.domain.models.pagination.DomainPage;
+import com.onclass.persona.domain.models.pagination.DomainPageRequest;
 
 public interface PersonPersistencePort {
 
@@ -12,5 +12,5 @@ public interface PersonPersistencePort {
 
     boolean existsByEmail(String email);
 
-    Page<PersonModel> findAll(Pageable pageable);
+    DomainPage<PersonModel> findAll(DomainPageRequest pageRequest);
 }
